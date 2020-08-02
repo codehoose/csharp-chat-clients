@@ -124,14 +124,24 @@ int main()
 					for (u_int i = 0; i < master.fd_count; i++)
 					{
 						SOCKET outSock = master.fd_array[i];
-						if (outSock != listening && outSock != sock)
+						if (outSock == listening)
 						{
-							ostringstream ss;
-							ss << "SOCKET #" << sock << ":" << buf << "\r\n";
-							string strOut = ss.str();
-
-							send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							continue;
 						}
+
+						ostringstream ss;
+
+						if (outSock != sock)
+						{
+							ss << "SOCKET #" << sock << ":" << buf << "\r\n";
+						}
+						else
+						{
+							ss << "ME:" << buf << "\r\n";
+						}
+
+						string strOut = ss.str();
+						send(outSock, strOut.c_str(), strOut.size() + 1, 0);
 					}
 				}
 			}
